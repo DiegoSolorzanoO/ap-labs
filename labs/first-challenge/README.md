@@ -36,21 +36,17 @@ Note that the answer must be a substring, `pwke` is a subsequence and not a subs
 Build Requirements
 ------------------
 ```
-# Build Requirements here
-```
-
-
-How to build
-------------
-```
-# instructions here
+# Python 3.6 installed
 ```
 
 
 How to Run
 ----------
 ```
-# instructions here
+# Run the program with Python
+# It will ask for an input like the examples, enter the value without "" 
+# Example-> Input:pwwkew
+# Get the result in output
 ```
 
 
