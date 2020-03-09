@@ -1,3 +1,14 @@
+How to run the program
+========================
+The program is a generic merge sort for INTEGERS
+```
+./generic_merge_sort INSERT ARRAY HERE
+
+Example:
+./generic_merge_sort 4 5 2 6 3 7 2 10
+Output: 2 2 3 4 5 6 7 10
+```
+
 Lab - Generic Merge Sort
 ========================
 On this lab you will be creating a [Merge Sort](https://en.wikipedia.org/wiki/Merge_sort) based program for sorting either strings or integers.
