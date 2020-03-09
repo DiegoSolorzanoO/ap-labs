@@ -1,3 +1,4 @@
+// Diego Solorzano Ortiz
 package main
 
 import "golang.org/x/tour/pic"
