@@ -1,39 +1,49 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <time.h>
+
 
 /* filecopy:  copy file ifp to file ofp */
-void filecopy(FILE *ifp, FILE *ofp)
+void filecopy(int fl)
 {
-    int c;
+    char bff[1];
 
-    while ((c = getc(ifp)) != EOF)
-        putc(c, ofp);
-
+    if (fl == -1) {
+        int c;
+        while ((c = getchar()) != EOF) {
+            printf("%c",c);
+        }
+    } else {
+        while ((read(fl,bff,1)) == 1) {
+            printf("%c",bff[0]);
+        }
+    }
 }
 
 /* cat:  concatenate files, version 2 */
 int main(int argc, char *argv[])
 {
-    FILE *fp;
-    void filecopy(FILE *, FILE *);
+    clock_t start = clock();
+    int fl = 0;
     char *prog = argv[0];   /* program name for errors */
 
-    if (argc == 1)  /* no args; copy standard input */
-        filecopy(stdin, stdout);
-    else
-        while (--argc > 0)
-            if ((fp = fopen(*++argv, "r")) == NULL) {
-                fprintf(stderr, "%s: can′t open %s\n",
-			prog, *argv);
-                return 1;
+    if (argc == 1) {
+        filecopy(-1);
+    } else {
+        while (--argc > 0) {
+            if((fl = open(*++argv, O_RDONLY)) == -1) {
+                printf("Error: Cannot open '%s'\n", *argv);
+                return 0;
             } else {
-                filecopy(fp, stdout);
-                fclose(fp);
+                filecopy(fl);
+                close(fl);
             }
-
-    if (ferror(stdout)) {
-        fprintf(stderr, "%s: error writing stdout\n", prog);
-        return 2;
+        }
     }
-
+    clock_t end = clock();
+    double total = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("-----\nEXECUTION CLOCK TIME = %f\n-----\n", total);
     return 0;
 }
