@@ -1,9 +1,9 @@
 Pacman Packages Report
 ----------------------
 - Installed packages : 566
-- Removed packages : 60
-- Upgraded packages : 602
-- Current installed : 506
+- Removed packages : 53
+- Upgraded packages : 261
+- Current installed : 513
 
 List of packages
 ----------------
@@ -1198,10 +1198,10 @@ List of packages
      - How many updates : 1
      - Removal date : -
 - Package Name : glide
-     - Install date : 2019-04-01 16:40
-     - Last update date : 2019-07-15 11:04
-     - How many updates : 2
-     - Removal date : 2019-07-18 16:22
+     - Install date : 2019-08-01 15:32
+     - Last update date : -
+     - How many updates : 0
+     - Removal date : -
 - Package Name : kubernetes-helm
      - Install date : 2019-04-01 16:50
      - Last update date : 2019-08-01 15:34
@@ -2263,35 +2263,35 @@ List of packages
      - How many updates : 1
      - Removal date : -
 - Package Name : python-yaml
-     - Install date : 2019-07-08 14:30
-     - Last update date : 2019-07-18 16:16
+     - Install date : 2019-07-18 16:24
+     - Last update date : 2019-08-22 16:00
      - How many updates : 1
-     - Removal date : 2019-07-18 16:22
+     - Removal date : -
 - Package Name : python-bcrypt
-     - Install date : 2019-07-08 14:30
+     - Install date : 2019-07-18 16:24
      - Last update date : -
      - How many updates : 0
-     - Removal date : 2019-07-18 16:22
+     - Removal date : -
 - Package Name : python-pyasn1
-     - Install date : 2019-07-08 14:30
-     - Last update date : -
-     - How many updates : 0
-     - Removal date : 2019-07-18 16:22
+     - Install date : 2019-07-18 16:24
+     - Last update date : 2019-09-02 12:42
+     - How many updates : 2
+     - Removal date : -
 - Package Name : libsodium
-     - Install date : 2019-07-08 14:30
+     - Install date : 2019-07-18 16:24
      - Last update date : -
      - How many updates : 0
-     - Removal date : 2019-07-18 16:22
+     - Removal date : -
 - Package Name : python-pynacl
-     - Install date : 2019-07-08 14:30
+     - Install date : 2019-07-18 16:24
      - Last update date : -
      - How many updates : 0
-     - Removal date : 2019-07-18 16:22
+     - Removal date : -
 - Package Name : python-paramiko
-     - Install date : 2019-07-08 14:30
-     - Last update date : -
-     - How many updates : 0
-     - Removal date : 2019-07-18 16:22
+     - Install date : 2019-07-18 16:24
+     - Last update date : 2019-07-30 11:42
+     - How many updates : 1
+     - Removal date : -
 - Package Name : python-sshtunnel
      - Install date : 2019-07-08 14:30
      - Last update date : -

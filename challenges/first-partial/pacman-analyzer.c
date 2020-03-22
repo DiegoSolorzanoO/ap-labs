@@ -72,20 +72,6 @@ int package_installed(char* name, int installed, struct package* packages) {
 }
 
 
-// This function checks if a package is already removed
-int package_removed(char* name, int installed, struct package* packages) {
-    for (int i = 0; i < installed; i++) {
-        if (strcmp(name,packages[i].name) == 0) {
-            if (packages[i].removed == 1) {
-                return i;
-            }
-            return -1;
-        }
-    }
-    return -1;
-}
-
-
 // This function erases the brackets of the date
 char* trimDate(char* date) {
     int i;
@@ -138,7 +124,8 @@ void analizeLog(char *logFile, char *report) {
         // If action is install
         if (strcmp(line[2],"installed") == 0) {
             // If the package is not installed
-            if (package_installed(line[3],installed_packages,packages) < 0) {
+            int installed = package_installed(line[3],installed_packages,packages);
+            if (installed == -1) {
                 // Adds installation of package
                 installed_packages++;
                 current_installed++;
@@ -149,12 +136,27 @@ void analizeLog(char *logFile, char *report) {
                 packages[index].updates = 0;
                 packages[index].updateDate = "-";
                 index++;
+            } else {
+                // If package was installed but removed
+                if (packages[installed].removed == 1) {
+                    current_installed++;
+                    removed_packages--;
+                    if (packages[installed].updates != 0) {
+                        upgraded_packages--;
+                    }
+                    packages[installed].installDate = line[0];
+                    packages[installed].removed = 0;
+                    packages[installed].removedDate = "-";
+                    packages[installed].updates = 0;
+                    packages[installed].updateDate = "-";
+                }
             }
+            
         // If action is remove
         } else if (strcmp(line[2],"removed") == 0) {
-            // Check if package is installed
+            // Check if package is installed and not already removed
             int installed = package_installed(line[3],installed_packages,packages);
-            if (installed >= 0) {
+            if (installed >= 0 && packages[installed].removed == 0) {
                 // Adds the removal data of the package
                 removed_packages++;
                 current_installed--;
@@ -165,10 +167,11 @@ void analizeLog(char *logFile, char *report) {
         } else if (strcmp(line[2],"upgraded") == 0) {
             // If the package is installed and has not being removed
             int installed = package_installed(line[3],installed_packages,packages);
-            int removed = package_removed(line[3],installed_packages,packages);
-            if ((installed >= 0) && (removed == -1)) {
+            if ((installed >= 0) && packages[installed].removed == 0) {
                 // Adds update data into the package information
-                upgraded_packages++;
+                if (packages[installed].updates == 0) {
+                    upgraded_packages++;
+                }
                 packages[installed].updates++;
                 packages[installed].updateDate = line[0];
             }
@@ -180,6 +183,8 @@ void analizeLog(char *logFile, char *report) {
     int wFile = open("packages_report.txt", O_WRONLY | O_CREAT, 0640);
 
     char text[MAX_STR_LEN];
+
+   
     
     // This section writes on the file the four main values of the analysis
     char* title = "Pacman Packages Report\n----------------------\n";
