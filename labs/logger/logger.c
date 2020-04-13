@@ -1,3 +1,5 @@
+// Diego Solorzano Ortiz
+
 #include <stdarg.h>
 #include <stdio.h>
 #include "logger.h"
