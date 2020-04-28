@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -13,7 +14,7 @@ func handleConn(c net.Conn) {
 	defer c.Close()
 	location, _ := time.LoadLocation(os.Getenv("TZ"))
 	for {
-		_, err := io.WriteString(c, time.Now().In(location).Format("15:04:05\n"))
+		_, err := io.WriteString(c, os.Getenv("TZ")+"     : "+time.Now().In(location).Format("15:04:05\n"))
 		if err != nil {
 			return // e.g., client disconnected
 		}
@@ -22,6 +23,10 @@ func handleConn(c net.Conn) {
 }
 
 func main() {
+	if len(os.Args) != 3 {
+		fmt.Println("Input error. Usage: clock2.go -port [port]")
+		return
+	}
 	listener, err := net.Listen("tcp", "localhost:"+os.Args[2])
 	if err != nil {
 		log.Fatal(err)
