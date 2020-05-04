@@ -7,6 +7,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -15,14 +16,21 @@ import (
 
 //!+
 func main() {
-	conn, err := net.Dial("tcp", "localhost:8000")
+	if len(os.Args) != 5 {
+		fmt.Println("Error: username or url missing")
+		return
+	}
+	user := os.Args[2]
+	url := os.Args[4]
+	conn, err := net.Dial("tcp", url)
 	if err != nil {
 		log.Fatal(err)
 	}
+	io.WriteString(conn, user)
 	done := make(chan struct{})
 	go func() {
 		io.Copy(os.Stdout, conn) // NOTE: ignoring errors
-		log.Println("done")
+		fmt.Println("Se ha perdido la conexión con el servidor")
 		done <- struct{}{} // signal the main goroutine
 	}()
 	mustCopy(conn, os.Stdin)
