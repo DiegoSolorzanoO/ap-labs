@@ -16,37 +16,60 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
-	"gopl.io/ch5/links"
+	"github.com/todostreaming/gopl.io/ch5/links"
 )
 
-//!+sema
 // tokens is a counting semaphore used to
 // enforce a limit of 20 concurrent requests.
 var tokens = make(chan struct{}, 20)
 
-func crawl(url string) []string {
-	fmt.Println(url)
-	tokens <- struct{}{} // acquire a token
-	list, err := links.Extract(url)
-	<-tokens // release the token
+var depth = 1
 
-	if err != nil {
-		log.Print(err)
+func crawl(url string, d int) []string {
+	fmt.Println(url)
+	if d > 0 {
+		tokens <- struct{}{} // acquire a token
+		list, err := links.Extract(url)
+		<-tokens // release the token
+
+		if err != nil {
+			log.Print(err)
+		}
+		return list
 	}
-	return list
+	return nil
 }
 
-//!-sema
-
-//!+
 func main() {
+
+	if len(os.Args) < 3 {
+		println("Error, correct usage: go run crawl3.go -depth=2 [URL]")
+		return
+	}
+
 	worklist := make(chan []string)
 	var n int // number of pending sends to worklist
 
+	d, err := strconv.Atoi(strings.Split(os.Args[1], "=")[1])
+
+	if err != nil {
+		println("Error, correct usage: go run crawl3.go -depth=2 [URL]")
+		return
+	} else {
+		depth = d
+	}
+
+	if depth < 1 {
+		println("Error, depth must be bigger than 0")
+		return
+	}
+
 	// Start with the command-line arguments.
 	n++
-	go func() { worklist <- os.Args[1:] }()
+	go func() { worklist <- os.Args[2:] }()
 
 	// Crawl the web concurrently.
 	seen := make(map[string]bool)
@@ -57,11 +80,12 @@ func main() {
 				seen[link] = true
 				n++
 				go func(link string) {
-					worklist <- crawl(link)
+					worklist <- crawl(link, depth)
+					if depth > 0 {
+						depth--
+					}
 				}(link)
 			}
 		}
 	}
 }
-
-//!-
